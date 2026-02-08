@@ -3,22 +3,27 @@ class Solution:
     def numIslands(self, grid: List[List[str]]) -> int:
         if not grid:
             return 0
-        rows, cols = len(grid), len(grid[0])
+        rows, columns = len(grid), len(grid[0])
+        directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+        visited = [[False for _ in range(columns)] for _ in range(rows)]
         count = 0
 
-        for r in range(rows): #遍历表中的每个位置
-            for c in range(cols):
-                if grid[r][c] == "1": #遇到陆地则计数，把该起点入队，并淹没该起点（必须入队前淹没，否则可能被邻节点视为陆地重新入队）
+        #将第一个点的周边所有陆地都记录至访问表
+        def dfs(r, c):
+            visited[r][c] = True
+            for dr, dc in directions:
+                nr = r + dr
+                nc = c + dc
+                if (0 <= nr < rows and 0 <= nc < columns and grid[nr][nc] == "1" and visited[nr][nc] == False):
+                    dfs(nr, nc) #节点在边界内、是陆地、还未标记，则对它展开搜查
+        #遍历每行每列，寻找符合要求的陆地首点
+        for r in range(rows):
+            for c in range(columns):
+                if grid[r][c] == "1" and visited[r][c] == False:
                     count += 1
-                    queue = deque([(r, c)])
-                    grid[r][c] = "0"
-                    while queue:
-                        curr_r, curr_c = queue.popleft()
-                        #检查curr_r, curr_c的四个方向，如果是边界内且是陆地，则把该节点入队并淹没
-                        for dr, dc in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
-                            next_r, next_c = curr_r + dr, curr_c + dc
-                            if (0 <= next_r < rows and 0 <= next_c < cols and grid[next_r][next_c] == '1'):
-                                queue.append((next_r, next_c))
-                                grid[next_r][next_c] = "0"
-
+                    dfs(r, c) #标记同一陆地的所有点
+        
         return count
+
+
+
