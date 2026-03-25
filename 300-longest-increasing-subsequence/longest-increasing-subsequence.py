@@ -1,15 +1,25 @@
 class Solution:
-    #Brute force
     def lengthOfLIS(self, nums: List[int]) -> int:
-        if not nums:
-            return 0
-        if len(nums) == 1:
-            return 1
-        
-        dp = [1] * len(nums)
-        for i in range(len(nums)):
-            for j in range(i):
-                if nums[i] > nums[j]:
-                    dp[i] = max(dp[i], dp[j] + 1) 
-        
-        return max(dp)
+        res = []
+
+        def binary_search(res, n):
+            left, right = 0, len(res) - 1
+            while left <= right:
+                mid = left + (right - left) // 2
+                if res[mid] == n:
+                    return mid
+                elif res[mid] > n:
+                    right = mid - 1
+                else:
+                    left = mid + 1
+
+            return left
+
+        for n in nums:
+            if not res or res[-1] < n:  #如果递增，则把当前元素添加至res
+                res.append(n)
+            else:   #不是递增，则在res中寻找一个位置（刚大于n），把该位置的数替换为n
+                idx = binary_search(res, n)
+                res[idx] = n
+                
+        return len(res)
