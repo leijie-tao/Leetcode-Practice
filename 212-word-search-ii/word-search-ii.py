@@ -40,14 +40,14 @@ class Solution:
             for dr, dc in [(0,1), (0,-1), (1,0), (-1,0)]:
                 nr, nc = r + dr, c + dc
                 if 0 <= nr < m and 0 <= nc < n:
-                    dfs(nr, nc, next_node) #If success, continue dfs to the next node
+                    dfs(nr, nc, next_node) #If the coordinate is within the grid, continue dfs to the next node
             
-            # If fail, recover the character
+            #After dfs for the current character, recover it.
             board[r][c] = char
 
         #Pruning: delete the nodes whose child nodes are all found.
-        #     if not next_node.children:
-        #         del node.children[char]
+            if not next_node.children:
+                del node.children[char]
 
         # execute dfs for each character on the graph
         for i in range(m):
