@@ -45,7 +45,7 @@ class Solution:
             #After dfs for the current character, recover it.
             board[r][c] = char
 
-        #Pruning: delete the nodes whose child nodes are all found.
+            #Pruning: delete the nodes whose child nodes are all found.
             if not next_node.children:
                 del node.children[char]
 
