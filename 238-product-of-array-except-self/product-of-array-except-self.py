@@ -12,20 +12,40 @@ class Solution:
 
 
 
-        # Method 2: divide the array into 2 parts (left & right)
-        n = len(nums)
-        left = [1] * n
-        right = [1] * n
+        # # Method 2: divide the array into 2 parts (left & right)
+        # n = len(nums)
+        # left = [1] * n
+        # right = [1] * n
 
-        #Left part: for who has left part
-        for i in range(1, n): 
-            left[i] = left[i-1] * nums[i-1]
-        #Right part: for who has rihgt part (direction: right to left)
-        for i in range(n-2, -1, -1):
-            right[i] = right[i+1] * nums[i+1]
-        #Multiply left part with right part to get the result
-        res = []
+        # #Left part: for who has left part
+        # for i in range(1, n): 
+        #     left[i] = left[i-1] * nums[i-1]
+        # #Right part: for who has rihgt part (direction: right to left)
+        # for i in range(n-2, -1, -1):
+        #     right[i] = right[i+1] * nums[i+1]
+        # #Multiply left part with right part to get the result
+        # res = []
+        # for i in range(n):
+        #     res.append(left[i] * right[i])
+        # return res
+
+
+
+        # Method 3: prefix & postfix (Keep updating a value instead of storing two subarray)
+        n = len(nums)
+        res = [1] * n
+        
+        #Left part
+        prefix = 1              #Calculate the current left product
         for i in range(n):
-            res.append(left[i] * right[i])
+            res[i] = prefix     #Record the left part
+            prefix *= nums[i]   #Update and pass to the next element
+
+        #Right part
+        postfix = 1
+        for i in range(n - 1, -1, -1):  #start from n-1 to 0 (-1 is not included), and step size is -1
+            res[i] *= postfix
+            postfix *= nums[i]
         return res
+        
         
