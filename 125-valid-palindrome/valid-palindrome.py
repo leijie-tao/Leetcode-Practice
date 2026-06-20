@@ -1,8 +1,29 @@
 class Solution:
     def isPalindrome(self, s: str) -> bool:
-        string = []
-        for char in s:
-            if char.isalnum(): #判断元素
-                string.append(char.lower())
+        # Tow pointers: From both sides to the middle
+        left = 0
+        right = len(s) -1 
+        while left < right:
+            if not s[left].isalnum():
+                left += 1
+            elif not s[right].isalnum():
+                right -= 1
+            else:
+                if s[left].lower() != s[right].lower():
+                    return False
+                else:
+                    left += 1
+                    right -= 1
+        return True
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
-        return string[::-1] == string #翻转列表并对比
+
