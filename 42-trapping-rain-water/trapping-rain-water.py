@@ -1,26 +1,33 @@
 class Solution:
     def trap(self, height: List[int]) -> int:
-        #核心：每单位能接水 min(left_max, right_max) - height
-        if not height:
-            return 0
-
-        left, right = 0, len(height)-1
-        left_max, right_max = 0, 0
-        result = 0
+        # # brute force: calculate trapped water of each position
+        # n = len(height)
+        # res = 0
+        # #trapped water = min(maxHeightOnTheLeft, maxHeightOnTheRight) - currentHeight
+        # for i in range(n):
+        #     left_max = max(height[:i+1])    
+        #     right_max = max(height[i:])   
+        #     res += min(left_max, right_max) - height[i]
+        # return res
+        
+        
+        
+        #Two pointers: Use left/right pointer to loop through. Maintain max vairable to determain the trapped water.
+        left, right = 0, len(height) - 1
+        left_max = right_max = 0
+        res = 0
+        
         while left < right:
-            #若min短板在左侧，更新左侧最大值left_max，累加单位水量，移动左指针
+            # For the whole container, the water is determined by the shorter side.
             if height[left] <= height[right]:
-                if height[left] > left_max:
-                    left_max = height[left]
-                else:
-                    result += left_max - height[left]
+                # For each position, the difference height is determined by the max height on this side.
+                left_max = max(left_max, height[left])
+                res += left_max - height[left]
                 left += 1
-            #若min短板在右侧，更新右侧最大值right_max，累加单位水量，移动右指针
             else:
-                if height[right] >= right_max:
-                    right_max = height[right]
-                else:
-                    result += right_max - height[right]
+                right_max = max(right_max, height[right])
+                res += right_max - height[right]
                 right -= 1
 
-        return result
+        return res
+
