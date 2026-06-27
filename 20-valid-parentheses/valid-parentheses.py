@@ -1,17 +1,21 @@
 class Solution:
     def isValid(self, s: str) -> bool:
-        d = {"(":")","[":"]","{":"}"}
         stack = []
-   
-        for char in s:
-            if char in d:
-                stack.append(char) #左括号入栈
+        map = {"(":")", "[":"]", "{":"}"}
+        for o in s:
+            if o in map:
+                stack.append(o)
             else:
-                if not stack:  #右括号过剩/先出现了右括号
+                # check if the left parts are enough to pop
+                if len(stack) == 0:
                     return False
-                left = stack.pop()
-                if char != d[left]: #左右括号不匹配
+                #check if it's a valid pair
+                tmp = stack.pop()
+                if map[tmp] != o:
                     return False
-
-        return len(stack) == 0  #检测最后左括号是否多余
+        # check if left parts are all paired
+        if len(stack) == 0:
+            return True
+        else:
+            return False
 
