@@ -1,6 +1,6 @@
 class Solution:
     def minEatingSpeed(self, piles: List[int], h: int) -> int:
-        # Binary Search: Find the target speed between min_speed and max_speed
+        # Binary Search: Find the boundary between min_speed and max_speed
         min_speed = 1
         max_speed = max(piles)
 
@@ -16,4 +16,6 @@ class Solution:
             else:
                 min_speed = mid + 1
 
+        #After the while loop, min_speed is just on the feasible side and max_speed is on the unfeasible side.
+        #Therefore, min_speed is the minimum speed that koko can eat up all bananas.
         return min_speed
