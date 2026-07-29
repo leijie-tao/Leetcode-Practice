@@ -44,15 +44,16 @@
 class Solution:
     def maxPathSum(self, root: Optional[TreeNode]) -> int:
         res = -float('inf')
-        def dfs(node):
+        def getMax(node):
             nonlocal res
             if not node:
                 return 0                      
-            left = max(dfs(node.left), 0)       #Filter negative numbers when receive the returning value from subtree
-            right = max(dfs(node.right), 0) 
+            leftmax = getMax(node.left)       
+            rightmax = getMax(node.right) 
             #Update the global maximum using the "path through this node".
-            res = max(res, node.val + left + right) 
-            #Return the best downward path to the parent. (Max Downward Path)
-            return node.val + max(left, right)    
-        dfs(root)
+            res = max(res, leftmax + rightmax + node.val)
+            #Return the best downward path to the parent. (Max Downward Path) (Ignore negative numbers)
+            current_path = max(leftmax, rightmax) + node.val
+            return max(current_path, 0)  
+        getMax(root)
         return res
