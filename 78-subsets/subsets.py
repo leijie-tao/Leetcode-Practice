@@ -1,13 +1,18 @@
 class Solution:
     def subsets(self, nums: List[int]) -> List[List[int]]:
         res = []
-        def backtrack(start, path):
-            res.append(path)
-            if start == len(nums): #终止条件
-                return
+        path = []
+        def backtrack(start):
+            # record the copy of path without conditions
+            res.append(path[:])
+            # Key point: use start to control where is the start of next layer in recursion
+            # Record all subsets starts from nums[i]
             for i in range(start, len(nums)):
-                backtrack(i + 1, path + [nums[i]]) #对每个第i位的数，向下递归层层寻找i+1之后数的子集
-                # path + nums[i]即为初始path+每一层的nums[i]，没有修改path本身因此回溯时不需要pop
+                path.append(nums[i])  #Add path
+                backtrack(i + 1)    #Recursion from i+1
+                path.pop()          #Withdraw the last node of current layer
+                # Go back to root, and continue for loop
                 
-        backtrack(0, [])
+        backtrack(0)
         return res
+
