@@ -6,20 +6,21 @@
 #         self.right = None
 
 class Solution:
-    # ------------ DFS : check a node has valid return from both sub-trees ----------------------
-    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
-        # Base case: return p/q or None
-        if not root or root == p or root == q:
+    # ------------ DFS : return node ----------------------
+    def lowestCommonAncestor(self, root: TreeNode, p: TreeNode, q: TreeNode) -> TreeNode:
+        # Stop condition(edge & find the targets)
+        if not root or not p or not q:
+            return None
+        if root == p or root == q:
             return root
 
-        # Each layer: check if both left-tree and right-tree return value
+        # Get returns from subtrees, and decide what to return
         left = self.lowestCommonAncestor(root.left, p, q)
         right = self.lowestCommonAncestor(root.right, p, q)
-        if right and left:
+        if left and right:
             return root
-
-        # Either left or right has value, return it to upper layer
-        return left or right
+        else:
+            return left or right
 
 
 
