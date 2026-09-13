@@ -31,17 +31,16 @@ class Solution:
 
     #DFS: Use a globle variable to avoid recomputing heights
     def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
-        res = 0
+        self.res = 0
         #Use dfs to get the max depth and update max diameter during the process
         def dfs(root):
-            nonlocal res
             if not root:
                 return 0
             left = dfs(root.left)
             right = dfs(root.right)
             # Update the max diameter
-            res = max(res, left + right)
-            return 1 + max(left, right)
+            self.res = max(self.res, left + right)  # diameter = left depth + right depth
+            return 1 + max(left, right)             # return the larger depth(nodes)
 
         dfs(root)
-        return res
+        return self.res
