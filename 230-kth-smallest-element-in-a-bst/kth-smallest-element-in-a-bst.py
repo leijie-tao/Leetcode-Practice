@@ -6,52 +6,53 @@
 #         self.right = right
 
 
-# #------------------------ Recursive DFS ------------------------
-# # In a BST, the inorder traversal (Left → Node → Right) naturally visits nodes in sorted order.
-# class Solution:
+# # #------------------------ DFS inorder traversal ------------------------
+class Solution:
 #     def kthSmallest(self, root: Optional[TreeNode], k: int) -> int:
-#         self.k = k
-#         self.res = 0
-
+#         arr = []
 #         def dfs(node):
 #             if not node:
-#                 return None
-#             # Left recursion
+#                 return
 #             dfs(node.left)
-#             # Node layer
-#             if self.res != 0:
-#                 return
-#             if self.k == 1:
-#                 self.res = node.val
-#                 return
-#             self.k -= 1
-#             # Right recursion
+#             arr.append(node.val)
 #             dfs(node.right)
 
 #         dfs(root)
-#         return self.res
-       
+#         return arr[k - 1]
 
 
-    # ---------------------- Iterative DFS ------------------------
-    # recursion ——> this traversal with a stack ——> only visit nodes until we reach the k-th smallest. No need to traverse the whole tree.
-class Solution:
+# # #------------------------ recursive DFS (call itself) ------------------------
+#     def kthSmallest(self, root: Optional[TreeNode], k: int) -> int:
+#         self.res = None
+#         self.count = 0
+#         def dfs(node):
+#             if not node or self.res is not None:
+#                 return
+#             dfs(node.left)
+#             self.count += 1
+#             if self.count == k:
+#                 self.res = node.val
+#                 return
+#             dfs(node.right)
+
+#         dfs(root)
+        # return self.res
+
+
+
+# #--------------- iterative DFS (use stack instead of recursion to simulate inorder traversal) ---------------------
     def kthSmallest(self, root: Optional[TreeNode], k: int) -> int:
         stack = []
-        curr = root
-
-        while stack or curr:
-            # Add all left nodes into the stack at first & add right nodes when move curr
-            while curr:
-                stack.append(curr)
-                curr = curr.left
-            # Start to pop from the smallest one 
-            curr = stack.pop()
+        node = root
+        while stack or node:
+            # Add all left nodes into stack first
+            while node:
+                stack.append(node)
+                node = node.left
+            # Simulate inorder traversal (left - root - check right)
+            node = stack.pop()
             k -= 1
             if k == 0:
-                return curr.val
-            # Move to right subtree (prepare to add node into stack & pop)
-            curr = curr.right
-
-
+                return node.val
+            node = node.right
 
