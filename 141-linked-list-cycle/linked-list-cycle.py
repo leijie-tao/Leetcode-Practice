@@ -6,13 +6,23 @@
 
 class Solution:
     def hasCycle(self, head: Optional[ListNode]) -> bool:
-        if not head or not head.next:   #空链表或只有一个节点，则return false
-            return False
+        # Use two pointers to decide if it's a cycle
+        fast = slow = head
 
-        fast = slow = head      #快慢指针同时从头出发，快指针每次2步，慢指针每次1步，相遇则说明循环
+        # check `fast` and `fast.next` are valid -> make sure we can use `fast.next.next`   
         while fast and fast.next:
+            #If there is a cycle, two pointers will meet each other.
             fast = fast.next.next
             slow = slow.next
-            if slow == fast:
+            if fast == slow:
                 return True
         return False
+        
+        
+        
+        
+        
+        
+        
+        
+        
