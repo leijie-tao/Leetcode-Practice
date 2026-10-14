@@ -1,35 +1,36 @@
 class Solution:
+    # ------ O(n + m): right&left pointers-> O(2n), counter(t)-> O(m) ----------
     def minWindow(self, s: str, t: str) -> str:
-        # record which character is needed
-        diff = defaultdict(int)
-        for c in t:
-            diff[c] -= 1
-        need_count = len(diff)
-        
-        ans_l, ans_r = -1, len(s)
-        ge_cnt = 0            #how many characters meet the demand （diff[c] >= 0）
-        l = 0
-
-        for r, c in enumerate(s):
-            diff[c] += 1      #within the window,  +1
-            if diff[c] == 0:  #if the amount is enough, +1
-                ge_cnt += 1
+        # substring includes t  ---> count characters
+        target = Counter(t)
+        window = Counter()
+        left = 0
+        matched = 0  #use match to avoid discussing extra characters in window
+        need_match = len(target)
+        min_length = float('inf')
+   
+        for right in range(len(s)):
+            # add characters into window, and record matched
+            window[s[right]] += 1
+            if s[right] in target and window[s[right]] == target[s[right]]:
+                matched += 1
             
-            #When all the characters are found, try to shrink and find the minimum window
-            while ge_cnt == need_count:  
-                if r - l < ans_r - ans_l:
-                    ans_l, ans_r = l, r #update the answer edges
-                
-                if diff[s[l]] == 0:     
-                    ge_cnt -= 1
-
-                diff[s[l]] -= 1         #move the left side, and mark that one more character is needed.(may not influence ge_cnt)
-                l += 1
-
-        if ans_l < 0:
+            # when t is contained by window, start to shrink window: check length, record start, remove element and update mathched
+            while matched == need_match:
+                if right - left + 1 < min_length:
+                    min_length = right - left + 1
+                    min_start = left
+                window[s[left]] -= 1
+                if s[left] in target and window[s[left]] < target[s[left]]:
+                    matched -= 1
+                left += 1
+        
+        if min_length == float('inf'):
             return ""
         else:
-            return s[ans_l:ans_r+1]
+            return s[min_start:min_start + min_length]
+
+
 
 
 
