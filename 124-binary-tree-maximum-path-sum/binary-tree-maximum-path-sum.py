@@ -6,25 +6,28 @@
 #         self.right = right
 
 
-# ------------------- DFS -------------------
+# ------------------- DFS: TC:O(n)   SC:O(h)-------------------
 class Solution:
     def maxPathSum(self, root: Optional[TreeNode]) -> int:
         self.res = float('-inf')
         def dfs(node):
             if not node:
                 return 0
-            # If subtree is negative, exclude it from path sum by using 0
+            # get positive value from subtree or 0
             left = max(dfs(node.left), 0)
             right = max(dfs(node.right), 0)
-            # max path through current node = left + right + node
-            cur = left + right + node.val
-            if cur > self.res:
-                self.res = cur
-            # return the max path sum of one subtree
-            return max(left,right) + node.val
-
+            path_sum = node.val + left + right
+            self.res = max(self.res, path_sum)
+            # choose the subtree with larger value
+            return max(left, right) + node.val
+        
         dfs(root)
         return self.res
-
-
+        
+        
+        
+        
+        
+        
+        
 
