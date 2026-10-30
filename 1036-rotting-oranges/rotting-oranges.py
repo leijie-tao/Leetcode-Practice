@@ -1,34 +1,39 @@
 class Solution:
-    # 多个点同时bfs扩散  ----> 先数出多少个烂橘子
+    # iterate by layer --> BFS    TC:O(m*n)   SC:O(m*n)
     def orangesRotting(self, grid: List[List[int]]) -> int:
         rows, cols = len(grid), len(grid[0])
-        minutes = 0
-        q = deque()     # rotten oranges -> queue
-        fresh = 0       # fresh oranges -> count to see when to stop
-
+        q = deque()
+        # adjacent list: 4 directions
+        directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+        fresh = 0
+        time = 0
+        #iterate each cell, add all rotted oranges into queue
         for r in range(rows):
             for c in range(cols):
                 if grid[r][c] == 2:
                     q.append((r, c))
-                elif grid[r][c] == 1:
+                if grid[r][c] == 1:
                     fresh += 1
-
-        while q and fresh > 0:     # fresh > 0 防止最后一批入队(全部腐烂)后多算 minutes += 1
+        
+        # While the queue is not empty and fresh oranges exist
+        while q and fresh > 0:
             n = len(q)
+            time += 1
+            # check 4 neighbors of each rotten orange -> make fresh orange rotten
             for _ in range(n):
                 r, c = q.popleft()
-                directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
                 for dr, dc in directions:
-                    new_r = r + dr
-                    new_c = c + dc
-                    if new_r in range(rows) and new_c in range(cols) and grid[new_r][new_c] == 1:
-                        grid[new_r][new_c] = 2
+                    nr = r + dr
+                    nc = c + dc
+                    if 0 <= nr < rows and 0 <= nc < cols and grid[nr][nc] == 1:
+                        grid[nr][nc] = 2
                         fresh -= 1
-                        q.append((new_r, new_c))
-            minutes += 1
+                        q.append((nr,nc))
         
         if fresh == 0:
-            return minutes
+            return time
         else:
             return -1
+
+
 
