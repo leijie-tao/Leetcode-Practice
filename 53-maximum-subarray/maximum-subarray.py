@@ -1,14 +1,16 @@
 
 class Solution:
-    #Solution1: Kadane Algrithm (refine dp by saving more space)
-    # ------- O(n) ------------
+    #Solution1: Kadane Algrithm       DP & greedy 
+    # -------TC O(n)    SC O(1)------------
     def maxSubArray(self, nums: List[int]) -> int:
         max_sum = nums[0]
         cur_sum = nums[0]
         for i in range(1, len(nums)):
-            # maximum subarray for i can be itself or (previous + nums[i])
-            cur_sum = max(nums[i], cur_sum + nums[i])
-            # update maximum subarray for the whole array
+            # if current sum is negative, reset the start of subarray
+            if cur_sum < 0:
+                cur_sum = 0
+            # calculate current sum and update max
+            cur_sum += nums[i]
             max_sum = max(max_sum, cur_sum)
         return max_sum
 
@@ -22,6 +24,6 @@ class Solution:
         # dp[0] = nums[0]
 
         # for i in range(1, n):
-        #     dp[i] = max(nums[i], dp[i-1] + nums[i]) #Add current nums[i] or restart from this index
+        #     dp[i] = max(nums[i], dp[i-1] + nums[i]) #use max to choose adding current nums[i] or restarting from this index
             
         # return max(dp)
